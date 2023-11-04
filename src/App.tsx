@@ -5,11 +5,12 @@ function App() {
   const [activeTab, setActiveTab] = useState(0);
   const [scrapedEmails, setScrapedEmails] = useState<string[]>([]);
 
-  // Hnadler which listens to this events
+  // Handler which listens to this events coming from webpage 
   chrome.runtime.onMessage.addListener((request,sender,sendResponse)=>{
-
     // Get Emails
-    alert(request.emails);
+    let emails = request.emails;
+    // Update the state with the scraped emails
+    setScrapedEmails(emails);
   })
 
   const getActiveTabInfo = () => {
@@ -23,6 +24,7 @@ function App() {
     });
   }
 
+  // So this function reads from web Page and send data to my extension script
   const scrapEmailDataFromPage = () => {
     const emailRegEx = /[\w\.=-]+@[\w\.-]+\.[\w]{2,3}/gim;
     const emails = document.body.innerHTML.match(emailRegEx) || [];
